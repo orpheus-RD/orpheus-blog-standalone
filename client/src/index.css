@@ -50,14 +50,14 @@
   --color-sidebar-ring: var(--sidebar-ring);
   
   /* Custom font families - English + Chinese fallback */
-  /* Display font: Cormorant for English, ZCOOL XiaoWei (楷体) for Chinese */
-  --font-display: 'Cormorant', 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', 'Kaiti SC', Georgia, serif;
-  /* Body font: Source Serif 4 for English, ZCOOL XiaoWei (楷体) for Chinese */
-  --font-body: 'Source Serif 4', 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', 'Kaiti SC', Georgia, serif;
+  /* Display font: Cormorant for English, Noto Serif SC for Chinese */
+  --font-display: 'Cormorant', 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+  /* Body font: Source Serif 4 for English, Noto Serif SC for Chinese */
+  --font-body: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
   /* Navigation font: Montserrat for English, Noto Sans SC for Chinese */
   --font-nav: 'Montserrat', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   /* Chinese-specific fonts for explicit use */
-  --font-chinese-kai: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', 'Kaiti SC', serif;
+  --font-chinese-serif: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
   --font-chinese-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Heiti SC', sans-serif;
 }
 
@@ -200,8 +200,8 @@
   }
   
   /* Chinese-specific font classes */
-  .font-chinese-kai {
-    font-family: var(--font-chinese-kai);
+  .font-chinese-serif {
+    font-family: var(--font-chinese-serif);
   }
   
   .font-chinese-sans {
