@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
       jsxLocPlugin(),
-      // Removed: vitePluginManusRuntime() - Manus-specific plugin
     ],
     resolve: {
       alias: {
@@ -28,8 +27,8 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: path.resolve(import.meta.dirname, "dist/public"),
       emptyOutDir: true,
-      // Optimize for production
-      minify: 'terser',
+      // Use esbuild for minification (default, no extra dependency needed)
+      minify: 'esbuild',
       sourcemap: mode !== 'production',
     },
     server: {
