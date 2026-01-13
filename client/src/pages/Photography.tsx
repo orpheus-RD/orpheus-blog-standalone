@@ -422,13 +422,13 @@ export default function Photography() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="relative max-w-[95vw] max-h-[85vh] md:max-w-[90vw] md:max-h-[80vh]"
+              className="relative max-w-[95vw] max-h-[85vh] md:max-w-[90vw] md:max-h-[80vh] flex flex-col items-center"
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={selectedPhoto.src}
                 alt={selectedPhoto.title}
-                className="max-w-full max-h-[70vh] md:max-h-[75vh] object-contain rounded-lg"
+                className="max-w-full max-h-[70vh] md:max-h-[75vh] object-contain rounded-lg mx-auto block"
               />
               
               {/* Photo Info */}
