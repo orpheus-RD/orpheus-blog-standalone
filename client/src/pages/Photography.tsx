@@ -263,7 +263,7 @@ export default function Photography() {
                 <p className="text-white/60 mb-2">
                   {selectedPhoto.location} · {selectedPhoto.year}
                 </p>
-                <p className="text-white/40 max-w-xl mx-auto">{selectedPhoto.description}</p>
+                <p className="text-white/40 max-w-xl mx-auto leading-relaxed">{selectedPhoto.description}</p>
                 {(selectedPhoto.camera || selectedPhoto.lens || selectedPhoto.settings) && (
                   <div className="mt-4 flex items-center justify-center gap-4 text-sm text-white/30">
                     {selectedPhoto.camera && <span>{selectedPhoto.camera}</span>}

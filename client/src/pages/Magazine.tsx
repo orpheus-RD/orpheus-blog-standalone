@@ -203,9 +203,9 @@ export default function Magazine() {
           {/* Article Content */}
           <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 lg:py-16">
             <article className="max-w-3xl mx-auto">
-              <div className="prose prose-lg prose-invert prose-p:text-white/80 prose-p:leading-relaxed prose-p:font-body prose-headings:font-display prose-headings:text-white max-w-none">
+              <div className="prose prose-lg prose-invert prose-mixed prose-p:text-white/80 prose-p:leading-relaxed prose-p:font-body prose-headings:font-display prose-headings:text-white max-w-none">
                 {selectedEssay.content.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="mb-6 md:mb-8 text-base md:text-lg leading-[1.9] md:leading-[2] text-white/80 font-body text-justify">
+                  <p key={index} className="mb-6 md:mb-8 text-base md:text-lg leading-[1.9] md:leading-[2] text-white/80 font-body text-justify tracking-wide">
                     {paragraph}
                   </p>
                 ))}

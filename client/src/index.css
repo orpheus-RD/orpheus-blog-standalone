@@ -49,10 +49,16 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   
-  /* Custom font families */
-  --font-display: 'Cormorant', Georgia, serif;
-  --font-body: 'Source Serif 4', Georgia, serif;
-  --font-nav: 'Montserrat', system-ui, sans-serif;
+  /* Custom font families - English + Chinese fallback */
+  /* Display font: Cormorant for English, Noto Serif SC for Chinese */
+  --font-display: 'Cormorant', 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+  /* Body font: Source Serif 4 for English, Noto Serif SC for Chinese */
+  --font-body: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+  /* Navigation font: Montserrat for English, Noto Sans SC for Chinese */
+  --font-nav: 'Montserrat', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  /* Chinese-specific fonts for explicit use */
+  --font-chinese-serif: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+  --font-chinese-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Heiti SC', sans-serif;
 }
 
 :root {
@@ -193,6 +199,15 @@
     font-family: var(--font-nav);
   }
   
+  /* Chinese-specific font classes */
+  .font-chinese-serif {
+    font-family: var(--font-chinese-serif);
+  }
+  
+  .font-chinese-sans {
+    font-family: var(--font-chinese-sans);
+  }
+  
   /* Glass morphism effect for navigation */
   .glass {
     background: rgba(0, 0, 0, 0.3);
@@ -297,4 +312,120 @@ html {
 ::selection {
   background: rgba(255, 255, 255, 0.2);
   color: white;
+}
+
+/* ==================== Chinese Typography Optimization ==================== */
+
+/* 
+ * Chinese text typically needs:
+ * - Slightly larger line-height (1.8-2.0 for body text)
+ * - Proper letter-spacing (Chinese doesn't need extra spacing)
+ * - Text justification works well for Chinese
+ * - Punctuation handling
+ */
+
+/* Base Chinese text optimization */
+:lang(zh),
+:lang(zh-CN),
+:lang(zh-Hans) {
+  /* Optimize Chinese text rendering */
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Chinese paragraph optimization */
+.prose-chinese p,
+.text-chinese {
+  line-height: 1.9;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  /* Prevent orphaned punctuation */
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* Chinese heading optimization */
+.prose-chinese h1,
+.prose-chinese h2,
+.prose-chinese h3,
+.prose-chinese h4 {
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+/* Mixed content (Chinese + English) optimization */
+.prose-mixed {
+  /* Balanced line-height for mixed content */
+  line-height: 1.85;
+  /* Allow proper word breaking */
+  word-break: normal;
+  overflow-wrap: break-word;
+  /* Justify text for cleaner appearance */
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Punctuation optimization for Chinese */
+.punct-squeeze {
+  /* Compress consecutive punctuation */
+  font-feature-settings: "halt" 1;
+}
+
+/* Hanging punctuation for Chinese quotes */
+.punct-hang {
+  hanging-punctuation: first last;
+}
+
+/* Utility class for Chinese article content */
+.article-content-zh {
+  font-family: var(--font-body);
+  line-height: 2;
+  text-align: justify;
+  letter-spacing: 0.02em;
+}
+
+.article-content-zh p {
+  margin-bottom: 1.5em;
+  text-indent: 2em; /* Traditional Chinese paragraph indent */
+}
+
+.article-content-zh p:first-of-type {
+  text-indent: 0; /* No indent for first paragraph */
+}
+
+/* Blockquote styling for Chinese */
+.article-content-zh blockquote {
+  font-style: normal; /* Chinese doesn't use italic for quotes */
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  padding-left: 1.5em;
+  margin: 1.5em 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive Chinese typography */
+@media (max-width: 640px) {
+  .article-content-zh {
+    line-height: 1.9;
+    letter-spacing: 0.01em;
+  }
+  
+  .article-content-zh p {
+    text-indent: 0; /* Remove indent on mobile for better readability */
+    margin-bottom: 1.25em;
+  }
+}
+
+/* Font weight adjustment for Chinese characters */
+/* Chinese fonts often appear lighter than Latin fonts at same weight */
+.font-display:lang(zh),
+.font-display:lang(zh-CN) {
+  font-weight: 500; /* Slightly heavier for Chinese display text */
+}
+
+/* Improve readability of small Chinese text */
+.text-sm:lang(zh),
+.text-xs:lang(zh) {
+  letter-spacing: 0.03em;
 }

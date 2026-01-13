@@ -248,7 +248,7 @@ export default function Academic() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <p className="font-body text-white/70 leading-relaxed pl-6 border-l-2 border-white/20">
+                      <p className="font-body text-white/70 leading-[1.85] pl-6 border-l-2 border-white/20 text-justify">
                         {paper.abstract}
                       </p>
                     </motion.div>
