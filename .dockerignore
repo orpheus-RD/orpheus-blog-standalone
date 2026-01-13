@@ -1,0 +1,52 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+.next
+.nuxt
+.output
+
+# Development files
+.env
+.env.local
+.env.*.local
+*.log
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Test files
+coverage
+*.test.ts
+*.spec.ts
+__tests__
+
+# Documentation
+*.md
+!README.md
+
+# Frontend source (not needed for backend container)
+client
+attached_assets
+public
+
+# Vercel config (not needed for Render)
+vercel.json
+
+# Local development
+.env.example
+docker-compose*.yml

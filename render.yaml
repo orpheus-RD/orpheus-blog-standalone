@@ -1,0 +1,52 @@
+# =============================================================================
+# Render Blueprint
+# Deploy backend to Render with this configuration
+# =============================================================================
+
+services:
+  - type: web
+    name: orpheus-blog-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    
+    # Health check
+    healthCheckPath: /health
+    
+    # Environment variables (set these in Render Dashboard)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false  # Set in dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false  # Set in dashboard
+      - key: ADMIN_PASSWORD
+        sync: false  # Set in dashboard
+      - key: CORS_ORIGINS
+        sync: false  # Set in dashboard (your Vercel frontend URL)
+      - key: AWS_ACCESS_KEY_ID
+        sync: false  # Set in dashboard
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false  # Set in dashboard
+      - key: S3_BUCKET
+        sync: false  # Set in dashboard
+      - key: AWS_REGION
+        value: us-east-1
+      - key: OPENAI_API_KEY
+        sync: false  # Optional, set in dashboard
+
+    # Auto-deploy on push
+    autoDeploy: true
+
+    # Scaling (adjust based on your needs)
+    plan: starter  # or standard, pro
+
+# Optional: Database (if you want Render to manage it)
+# databases:
+#   - name: orpheus-blog-db
+#     plan: starter
+#     databaseName: orpheus_blog
+#     user: orpheus
