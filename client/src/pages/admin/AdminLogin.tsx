@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_BASE_URL } from "@/const";
-import { useLocation } from "wouter";
 import { Loader2 } from "lucide-react";
 
 export default function AdminLogin() {
@@ -11,7 +10,6 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [, setLocation] = useLocation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,11 +32,15 @@ export default function AdminLogin() {
         throw new Error(data.error || "登录失败");
       }
 
-      // Login successful, redirect to admin dashboard
-      setLocation("/admin");
-      // Force a page reload to refresh auth state
-      window.location.href = "/admin";
+      // Login successful - store token in localStorage as backup for cross-domain
+      if (data.token) {
+        localStorage.setItem("auth_token", data.token);
+      }
+
+      // Force a full page reload to refresh auth state
+      window.location.replace("/admin");
     } catch (err) {
+      console.error("[Login Error]", err);
       setError(err instanceof Error ? err.message : "登录失败，请重试");
     } finally {
       setLoading(false);
@@ -71,6 +73,7 @@ export default function AdminLogin() {
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
+              autoComplete="email"
             />
           </div>
 
@@ -84,6 +87,7 @@ export default function AdminLogin() {
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={loading}
+              autoComplete="current-password"
             />
           </div>
 

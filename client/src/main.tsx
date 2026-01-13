@@ -25,8 +25,11 @@ const redirectToLoginIfUnauthorized = (error: unknown) => {
 
   if (!isUnauthorized) return;
 
-  // Only redirect if we're on an admin page
-  if (window.location.pathname.startsWith("/admin")) {
+  // Only redirect if we're on an admin page and not already on login page
+  if (window.location.pathname.startsWith("/admin") && 
+      !window.location.pathname.includes("/login")) {
+    // Clear stored token on unauthorized
+    localStorage.removeItem("auth_token");
     window.location.href = getLoginUrl();
   }
 };
@@ -57,11 +60,28 @@ const getTrpcUrl = (): string => {
   return "/api/trpc";
 };
 
+/**
+ * Get auth token from localStorage (for cross-domain authentication)
+ */
+const getAuthToken = (): string | null => {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("auth_token");
+};
+
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
       url: getTrpcUrl(),
       transformer: superjson,
+      headers() {
+        const token = getAuthToken();
+        if (token) {
+          return {
+            Authorization: `Bearer ${token}`,
+          };
+        }
+        return {};
+      },
       fetch(input, init) {
         return globalThis.fetch(input, {
           ...(init ?? {}),

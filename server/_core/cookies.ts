@@ -28,11 +28,15 @@ export function getSessionCookieOptions(
   const isProduction = config.isProduction;
   const isSecure = isSecureRequest(req);
 
+  // For cross-domain requests in production (Vercel frontend + Render backend),
+  // we need SameSite=None and Secure=true
+  // However, this requires HTTPS on both ends
+  
   return {
     httpOnly: true,
     path: "/",
     // In production with HTTPS, use 'none' for cross-origin requests
-    // In development, use 'lax' for same-site requests
+    // This allows cookies to be sent in cross-origin requests
     sameSite: isProduction && isSecure ? "none" : "lax",
     secure: isSecure,
   };

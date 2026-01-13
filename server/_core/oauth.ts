@@ -3,6 +3,7 @@
  * 
  * Provides login/logout endpoints for the simplified auth system.
  * Replaces Manus OAuth with email/password based authentication.
+ * Supports both cookie-based and token-based authentication for cross-domain scenarios.
  */
 
 import type { Express, Request, Response } from "express";
@@ -16,6 +17,8 @@ export function registerOAuthRoutes(app: Express) {
    * 
    * Login with email and password (for admin access)
    * Body: { email: string, password: string }
+   * 
+   * Returns both a cookie and a token for cross-domain compatibility
    */
   app.post("/api/auth/login", async (req: Request, res: Response) => {
     try {
@@ -28,14 +31,17 @@ export function registerOAuthRoutes(app: Express) {
 
       const { user, sessionToken } = await loginWithPassword(email, password);
 
+      // Set cookie for same-domain requests
       const cookieOptions = getSessionCookieOptions(req);
       res.cookie(config.auth.sessionCookieName, sessionToken, {
         ...cookieOptions,
         maxAge: config.auth.sessionMaxAge,
       });
 
+      // Also return token in response body for cross-domain scenarios
       res.json({
         success: true,
+        token: sessionToken,
         user: {
           id: user.id,
           email: user.email,

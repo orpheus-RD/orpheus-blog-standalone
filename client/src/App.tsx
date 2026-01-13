@@ -16,12 +16,15 @@ import Layout from "./components/Layout";
 function Router() {
   return (
     <Switch>
-      {/* Admin login route */}
+      {/* Admin login route - must be before other admin routes */}
       <Route path="/admin/login" component={AdminLogin} />
       
       {/* Admin routes - without Layout */}
+      <Route path="/admin/photos" component={Admin} />
+      <Route path="/admin/essays" component={Admin} />
+      <Route path="/admin/papers" component={Admin} />
+      <Route path="/admin/settings" component={Admin} />
       <Route path="/admin" component={Admin} />
-      <Route path="/admin/:rest*" component={Admin} />
       
       {/* Public routes - with Layout */}
       <Route>

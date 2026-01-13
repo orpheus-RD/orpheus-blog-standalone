@@ -8,6 +8,15 @@ type UseAuthOptions = {
   redirectPath?: string;
 };
 
+/**
+ * Clear auth token from localStorage
+ */
+function clearAuthToken() {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("auth_token");
+  }
+}
+
 export function useAuth(options?: UseAuthOptions) {
   const { redirectOnUnauthenticated = false, redirectPath = getLoginUrl() } =
     options ?? {};
@@ -21,6 +30,7 @@ export function useAuth(options?: UseAuthOptions) {
   const logoutMutation = trpc.auth.logout.useMutation({
     onSuccess: () => {
       utils.auth.me.setData(undefined, null);
+      clearAuthToken();
     },
   });
 
@@ -32,12 +42,17 @@ export function useAuth(options?: UseAuthOptions) {
         error instanceof TRPCClientError &&
         error.data?.code === "UNAUTHORIZED"
       ) {
+        // Already logged out, just clear local state
+        clearAuthToken();
         return;
       }
       throw error;
     } finally {
       utils.auth.me.setData(undefined, null);
+      clearAuthToken();
       await utils.auth.me.invalidate();
+      // Redirect to login page after logout
+      window.location.href = getLoginUrl();
     }
   }, [logoutMutation, utils]);
 

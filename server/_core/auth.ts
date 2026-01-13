@@ -3,6 +3,7 @@
  * 
  * Provides JWT-based authentication without Manus OAuth dependency.
  * Supports email/password login and optional third-party OAuth.
+ * Supports both cookie-based and header-based token authentication.
  */
 
 import { parse as parseCookieHeader } from "cookie";
@@ -107,16 +108,36 @@ export function getSessionCookie(req: Request): string | undefined {
   return cookies.get(config.auth.sessionCookieName);
 }
 
+/**
+ * Get session token from request (cookie or Authorization header)
+ * Supports both cookie-based and header-based authentication for cross-domain scenarios
+ */
+export function getSessionToken(req: Request): string | undefined {
+  // First try to get from cookie
+  const cookieToken = getSessionCookie(req);
+  if (cookieToken) {
+    return cookieToken;
+  }
+
+  // Then try Authorization header (Bearer token)
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    return authHeader.substring(7);
+  }
+
+  return undefined;
+}
+
 // ============================================================================
 // Authentication Methods
 // ============================================================================
 
 /**
- * Authenticate a request using the session cookie
+ * Authenticate a request using the session cookie or Authorization header
  */
 export async function authenticateRequest(req: Request): Promise<User> {
-  const sessionCookie = getSessionCookie(req);
-  const session = await verifySessionToken(sessionCookie);
+  const sessionToken = getSessionToken(req);
+  const session = await verifySessionToken(sessionToken);
 
   if (!session) {
     throw UnauthorizedError("Invalid or expired session");
