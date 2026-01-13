@@ -8,13 +8,37 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import fs from "fs";
+import path from "path";
 import { createServer } from "http";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
-import { serveStatic, setupVite } from "./vite";
 import { config, validateConfig } from "./config";
+
+/**
+ * Serve static files in production mode.
+ * Inlined here to avoid any vite dependencies.
+ */
+function serveStatic(app: express.Express) {
+  const distPath = path.resolve(import.meta.dirname, "public");
+  
+  if (!fs.existsSync(distPath)) {
+    console.error(
+      `[Static] Could not find the build directory: ${distPath}, make sure to build the client first`
+    );
+  } else {
+    console.log(`[Static] Serving static files from: ${distPath}`);
+  }
+
+  app.use(express.static(distPath));
+
+  // fall through to index.html if the file doesn't exist (SPA routing)
+  app.use("*", (_req, res) => {
+    res.sendFile(path.resolve(distPath, "index.html"));
+  });
+}
 
 async function startServer() {
   // Validate configuration
@@ -56,9 +80,8 @@ async function startServer() {
 
       // In production, check against allowed origins
       const allowedOrigins = config.server.corsOrigins;
-      if (allowedOrigins.length === 0) {
-        // If no origins configured, allow all (not recommended for production)
-        console.warn("[CORS] No origins configured, allowing all");
+      if (allowedOrigins.length === 0 || allowedOrigins.includes("*")) {
+        // If no origins configured or wildcard, allow all
         callback(null, true);
         return;
       }
@@ -100,8 +123,12 @@ async function startServer() {
   // In development mode, use Vite for HMR
   // In production mode, serve static files
   if (config.isDevelopment) {
+    // Dynamic import using a variable to prevent esbuild from bundling vite
+    const vitePath = "./vite.js";
+    const { setupVite } = await import(/* @vite-ignore */ vitePath);
     await setupVite(app, server);
   } else {
+    // Production: serve static files (no vite dependency)
     serveStatic(app);
   }
 
