@@ -1,4 +1,4 @@
-/*
+/**
  * Design Philosophy: Atmospheric Immersion
  * - Formal academic presentation with visual consistency
  * - Clean typography supporting serious reading
@@ -28,75 +28,32 @@ interface Paper {
   citations?: number;
 }
 
-// Fallback static papers
-const staticPapers: Paper[] = [
-  {
-    id: 1,
-    title: "Visual Rhetoric in Contemporary Documentary Photography: A Semiotic Analysis",
-    authors: ["Orpheus D."],
-    abstract:
-      "This paper examines the evolving visual rhetoric employed in contemporary documentary photography, analyzing how photographers construct meaning through compositional choices, color grading, and subject positioning. Drawing on semiotic theory and visual culture studies, we propose a framework for understanding how documentary images function as both evidence and argument in the digital age.",
-    journal: "Journal of Visual Culture",
-    year: "2024",
-    volume: "23",
-    pages: "145-172",
-    doi: "10.1177/1470412924000001",
-    keywords: ["Documentary Photography", "Visual Rhetoric", "Semiotics", "Digital Culture"],
-  },
-  {
-    id: 2,
-    title: "The Phenomenology of Place: Architectural Experience and Embodied Perception",
-    authors: ["Orpheus D.", "Smith, J."],
-    abstract:
-      "This study investigates the phenomenological dimensions of architectural experience, focusing on how built environments shape embodied perception and spatial consciousness. Through a combination of theoretical analysis and empirical observation, we argue that architecture functions as a medium for the cultivation of particular modes of being-in-the-world.",
-    journal: "Architectural Theory Review",
-    year: "2024",
-    volume: "29",
-    pages: "78-103",
-    doi: "10.1080/13264826.2024.000002",
-    keywords: ["Phenomenology", "Architecture", "Embodiment", "Spatial Perception"],
-  },
-  {
-    id: 3,
-    title: "Between Stillness and Motion: Temporality in Landscape Photography",
-    authors: ["Orpheus D."],
-    abstract:
-      "This article explores the paradoxical relationship between stillness and motion in landscape photography, examining how photographers negotiate the tension between the frozen moment of capture and the continuous flow of natural time. We analyze works by contemporary landscape photographers to demonstrate how temporal complexity is encoded within seemingly static images.",
-    journal: "Photography & Culture",
-    year: "2023",
-    volume: "16",
-    pages: "234-258",
-    doi: "10.1080/17514517.2023.000003",
-    keywords: ["Landscape Photography", "Temporality", "Nature", "Visual Arts"],
-  },
-];
-
 export default function Academic() {
   const [expandedAbstract, setExpandedAbstract] = useState<number | null>(null);
 
   // Fetch papers from database
-  const { data: dbPapers, isLoading } = trpc.papers.list.useQuery({});
+  const { data: dbPapers, isLoading, error } = trpc.papers.list.useQuery({});
 
   // Transform database papers to display format
   const papers = useMemo(() => {
-    if (dbPapers && dbPapers.length > 0) {
-      return dbPapers.map(p => ({
-        id: p.id,
-        title: p.title,
-        authors: p.authors.split(',').map(a => a.trim()),
-        abstract: p.abstract || "",
-        journal: p.journal || "",
-        year: p.year?.toString() || new Date().getFullYear().toString(),
-        volume: p.volume || undefined,
-        issue: p.issue || undefined,
-        pages: p.pages || undefined,
-        doi: p.doi || undefined,
-        keywords: p.tags ? p.tags.split(',').map(t => t.trim()) : [],
-        pdfUrl: p.pdfUrl || undefined,
-        citations: p.citations || undefined,
-      }));
+    if (!dbPapers || dbPapers.length === 0) {
+      return [];
     }
-    return staticPapers;
+    return dbPapers.map(p => ({
+      id: p.id,
+      title: p.title,
+      authors: p.authors.split(',').map(a => a.trim()),
+      abstract: p.abstract || "",
+      journal: p.journal || "",
+      year: p.year?.toString() || new Date().getFullYear().toString(),
+      volume: p.volume || undefined,
+      issue: p.issue || undefined,
+      pages: p.pages || undefined,
+      doi: p.doi || undefined,
+      keywords: p.tags ? p.tags.split(',').map(t => t.trim()) : [],
+      pdfUrl: p.pdfUrl || undefined,
+      citations: p.citations || undefined,
+    }));
   }, [dbPapers]);
 
   const handleDownload = async (pdfUrl?: string, title?: string) => {
@@ -132,6 +89,7 @@ export default function Academic() {
     window.open(`https://doi.org/${doi}`, "_blank");
   };
 
+  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background pt-24 pb-16">
@@ -153,6 +111,20 @@ export default function Academic() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background pt-24 pb-16">
+        <div className="container mx-auto px-6">
+          <div className="text-center py-16">
+            <p className="text-red-400 mb-2">Failed to load papers</p>
+            <p className="text-white/40 text-sm">{error.message}</p>
           </div>
         </div>
       </div>
@@ -182,7 +154,8 @@ export default function Academic() {
         {papers.length === 0 ? (
           <div className="text-center py-20">
             <GraduationCap className="w-16 h-16 text-white/20 mx-auto mb-4" />
-            <p className="text-white/40 font-body">No papers yet</p>
+            <h2 className="text-xl font-medium text-white/80 mb-2">No papers yet</h2>
+            <p className="text-white/40 font-body">Academic papers will appear here once they are published.</p>
           </div>
         ) : (
           <div className="space-y-8">
@@ -303,20 +276,22 @@ export default function Academic() {
       </div>
 
       {/* Citation Note */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
-        className="container mx-auto px-6 mt-16"
-      >
-        <div className="border-t border-white/10 pt-8">
-          <p className="font-body text-sm text-white/40 max-w-2xl">
-            For citation information or to request full-text access to any of these
-            publications, please contact the author directly. All works are
-            protected under applicable copyright laws.
-          </p>
-        </div>
-      </motion.div>
+      {papers.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="container mx-auto px-6 mt-16"
+        >
+          <div className="border-t border-white/10 pt-8">
+            <p className="font-body text-sm text-white/40 max-w-2xl">
+              For citation information or to request full-text access to any of these
+              publications, please contact the author directly. All works are
+              protected under applicable copyright laws.
+            </p>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

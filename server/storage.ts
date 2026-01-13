@@ -52,6 +52,38 @@ function getS3Client(): S3Client {
 }
 
 // ============================================================================
+// URL Construction Helper
+// ============================================================================
+
+/**
+ * Construct the public URL for an uploaded file
+ * 
+ * For Cloudflare R2: Uses S3_PUBLIC_URL (e.g., https://pub-xxx.r2.dev)
+ * For standard S3: Uses bucket.s3.region.amazonaws.com format
+ */
+function constructPublicUrl(key: string): string {
+  const { bucket, region, endpoint, publicUrl } = config.storage.s3;
+  const normalizedKey = key.replace(/^\/+/, "");
+
+  // If a public URL is configured (e.g., R2 public dev URL), use it
+  if (publicUrl) {
+    // Remove trailing slash from publicUrl if present
+    const baseUrl = publicUrl.replace(/\/+$/, "");
+    return `${baseUrl}/${normalizedKey}`;
+  }
+
+  // For S3-compatible services without public URL configured
+  if (endpoint) {
+    // This won't work for R2 without public URL, but kept for other S3-compatible services
+    console.warn("[Storage] S3_PUBLIC_URL not configured. Files may not be publicly accessible.");
+    return `${endpoint}/${bucket}/${normalizedKey}`;
+  }
+
+  // Standard S3 URL
+  return `https://${bucket}.s3.${region}.amazonaws.com/${normalizedKey}`;
+}
+
+// ============================================================================
 // Storage Operations
 // ============================================================================
 
@@ -69,7 +101,7 @@ export async function storagePut(
   contentType: string = "application/octet-stream"
 ): Promise<{ key: string; url: string }> {
   const s3 = getS3Client();
-  const { bucket, region, endpoint } = config.storage.s3;
+  const { bucket } = config.storage.s3;
   
   // Normalize key (remove leading slashes)
   const normalizedKey = key.replace(/^\/+/, "");
@@ -79,23 +111,14 @@ export async function storagePut(
     Key: normalizedKey,
     Body: typeof data === "string" ? Buffer.from(data) : data,
     ContentType: contentType,
-    // Make objects publicly readable
-    ACL: "public-read",
+    // Note: ACL may not work with all S3-compatible services
+    // For R2, public access is configured at bucket level
   });
 
   await s3.send(command);
 
   // Construct public URL
-  let url: string;
-  if (endpoint) {
-    // For S3-compatible services, construct URL based on endpoint
-    // Cloudflare R2 public URL format: https://pub-{hash}.r2.dev/{key}
-    // For custom domains, use the bucket as subdomain or path
-    url = `${endpoint}/${bucket}/${normalizedKey}`;
-  } else {
-    // Standard S3 URL
-    url = `https://${bucket}.s3.${region}.amazonaws.com/${normalizedKey}`;
-  }
+  const url = constructPublicUrl(normalizedKey);
 
   return { key: normalizedKey, url };
 }
@@ -159,7 +182,7 @@ export async function getPresignedUploadUrl(
   expiresIn: number = 900
 ): Promise<{ key: string; uploadUrl: string; publicUrl: string }> {
   const s3 = getS3Client();
-  const { bucket, region, endpoint } = config.storage.s3;
+  const { bucket } = config.storage.s3;
   
   const normalizedKey = key.replace(/^\/+/, "");
 
@@ -167,20 +190,24 @@ export async function getPresignedUploadUrl(
     Bucket: bucket,
     Key: normalizedKey,
     ContentType: contentType,
-    ACL: "public-read",
   });
 
   const uploadUrl = await getSignedUrl(s3, command, { expiresIn });
 
   // Construct public URL
-  let publicUrl: string;
-  if (endpoint) {
-    publicUrl = `${endpoint}/${bucket}/${normalizedKey}`;
-  } else {
-    publicUrl = `https://${bucket}.s3.${region}.amazonaws.com/${normalizedKey}`;
-  }
+  const publicUrl = constructPublicUrl(normalizedKey);
 
   return { key: normalizedKey, uploadUrl, publicUrl };
+}
+
+/**
+ * Get the public URL for an existing file
+ * 
+ * @param key - The S3 object key
+ * @returns Public URL for the file
+ */
+export function getPublicUrl(key: string): string {
+  return constructPublicUrl(key);
 }
 
 // ============================================================================
@@ -193,4 +220,12 @@ export async function getPresignedUploadUrl(
 export function isStorageConfigured(): boolean {
   const { s3 } = config.storage;
   return Boolean(s3.accessKeyId && s3.secretAccessKey && s3.bucket);
+}
+
+/**
+ * Check if public URL is configured (required for R2)
+ */
+export function isPublicUrlConfigured(): boolean {
+  const { s3 } = config.storage;
+  return Boolean(s3.publicUrl);
 }

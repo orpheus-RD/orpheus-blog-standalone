@@ -33,6 +33,7 @@ interface StorageConfig {
     bucket: string;
     region: string;
     endpoint?: string; // For S3-compatible services like R2
+    publicUrl?: string; // Public URL for accessing files (e.g., R2 public dev URL)
   };
 }
 
@@ -131,6 +132,7 @@ function buildConfig(): AppConfig {
         bucket: getEnvOptional("S3_BUCKET", ""),
         region: getEnvOptional("AWS_REGION", "us-east-1"),
         endpoint: getEnvOptional("S3_ENDPOINT", ""), // For Cloudflare R2 or MinIO
+        publicUrl: getEnvOptional("S3_PUBLIC_URL", ""), // Public URL for R2 (e.g., https://pub-xxx.r2.dev)
       },
     },
 
@@ -210,6 +212,9 @@ export function validateConfig(): { valid: boolean; errors: string[] } {
     if (!cfg.storage.s3.accessKeyId || !cfg.storage.s3.secretAccessKey) {
       console.warn("[Config] S3 credentials not set - file upload will be disabled");
     }
+    if (cfg.storage.s3.endpoint && !cfg.storage.s3.publicUrl) {
+      console.warn("[Config] S3_PUBLIC_URL not set - uploaded files may not be publicly accessible");
+    }
   }
 
   return {
@@ -253,6 +258,9 @@ export const ENV = {
   },
   get s3Endpoint() {
     return config.storage.s3.endpoint;
+  },
+  get s3PublicUrl() {
+    return config.storage.s3.publicUrl;
   },
   // OpenAI
   get openaiApiKey() {
