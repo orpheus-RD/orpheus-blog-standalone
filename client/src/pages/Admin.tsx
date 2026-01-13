@@ -41,6 +41,7 @@ import AdminDashboard from "./admin/AdminDashboard";
 import AdminPhotos from "./admin/AdminPhotos";
 import AdminEssays from "./admin/AdminEssays";
 import AdminPapers from "./admin/AdminPapers";
+import AdminBackgrounds from "./admin/AdminBackgrounds";
 import AdminSettings from "./admin/AdminSettings";
 
 const menuItems = [
@@ -323,6 +324,7 @@ function AdminLayoutContent({ setSidebarWidth }: AdminLayoutContentProps) {
             <Route path="/admin/photos" component={AdminPhotos} />
             <Route path="/admin/essays" component={AdminEssays} />
             <Route path="/admin/papers" component={AdminPapers} />
+            <Route path="/admin/backgrounds" component={AdminBackgrounds} />
             <Route path="/admin/settings" component={AdminSettings} />
           </Switch>
         </main>

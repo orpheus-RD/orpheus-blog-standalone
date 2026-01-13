@@ -5,7 +5,8 @@ import {
   photos, InsertPhoto, Photo,
   essays, InsertEssay, Essay,
   papers, InsertPaper, Paper,
-  siteSettings, InsertSiteSetting
+  siteSettings, InsertSiteSetting,
+  backgrounds, InsertBackground, Background
 } from "../drizzle/schema";
 import { config } from './_core/config';
 
@@ -422,5 +423,63 @@ export async function setSetting(key: string, value: string) {
   await db.insert(siteSettings).values({ key, value }).onDuplicateKeyUpdate({
     set: { value },
   });
+  return { success: true };
+}
+
+// ==================== Backgrounds ====================
+
+export async function getAllBackgrounds(options?: { active?: boolean; limit?: number }) {
+  const db = await getDb();
+  if (!db) return [];
+
+  let query = db.select().from(backgrounds);
+  
+  const conditions = [];
+  if (options?.active !== undefined) {
+    conditions.push(eq(backgrounds.active, options.active));
+  }
+  
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions)) as typeof query;
+  }
+  
+  query = query.orderBy(desc(backgrounds.sortOrder), desc(backgrounds.createdAt)) as typeof query;
+  
+  if (options?.limit) {
+    query = query.limit(options.limit) as typeof query;
+  }
+  
+  return await query;
+}
+
+export async function getBackgroundById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(backgrounds).where(eq(backgrounds.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createBackground(background: InsertBackground) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(backgrounds).values(background);
+  return { id: result[0].insertId };
+}
+
+export async function updateBackground(id: number, background: Partial<InsertBackground>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(backgrounds).set(background).where(eq(backgrounds.id, id));
+  return { success: true };
+}
+
+export async function deleteBackground(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(backgrounds).where(eq(backgrounds.id, id));
   return { success: true };
 }

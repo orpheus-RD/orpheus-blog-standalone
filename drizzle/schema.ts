@@ -115,3 +115,20 @@ export const siteSettings = mysqlTable("site_settings", {
 
 export type SiteSetting = typeof siteSettings.$inferSelect;
 export type InsertSiteSetting = typeof siteSettings.$inferInsert;
+
+/**
+ * Backgrounds - 首页背景图表
+ */
+export const backgrounds = mysqlTable("backgrounds", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }),
+  imageUrl: text("imageUrl").notNull(),
+  imageKey: varchar("imageKey", { length: 500 }),
+  active: boolean("active").default(true),
+  sortOrder: int("sortOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Background = typeof backgrounds.$inferSelect;
+export type InsertBackground = typeof backgrounds.$inferInsert;

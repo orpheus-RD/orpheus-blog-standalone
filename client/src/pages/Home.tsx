@@ -6,11 +6,13 @@
  * - Minimal UI interference
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 
-const backgroundImages = [
+// Default fallback images when no backgrounds are configured
+const defaultBackgroundImages = [
   "/images/DSCF3114.JPG",
   "/images/image7.jpg",
   "/images/image1.jpg",
@@ -22,6 +24,17 @@ const backgroundImages = [
 export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  // Fetch backgrounds from database
+  const { data: dbBackgrounds } = trpc.backgrounds.list.useQuery({});
+
+  // Use database backgrounds if available, otherwise use defaults
+  const backgroundImages = useMemo(() => {
+    if (dbBackgrounds && dbBackgrounds.length > 0) {
+      return dbBackgrounds.map(bg => bg.imageUrl);
+    }
+    return defaultBackgroundImages;
+  }, [dbBackgrounds]);
 
   // Preload images
   useEffect(() => {
@@ -40,18 +53,23 @@ export default function Home() {
           })
       )
     ).then(() => setIsLoaded(true));
-  }, []);
+  }, [backgroundImages]);
 
   // Auto-rotate images every 8 seconds
   const nextImage = useCallback(() => {
     setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
-  }, []);
+  }, [backgroundImages.length]);
 
   useEffect(() => {
     if (!isLoaded) return;
     const interval = setInterval(nextImage, 8000);
     return () => clearInterval(interval);
   }, [isLoaded, nextImage]);
+
+  // Reset index if backgrounds change
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [backgroundImages]);
 
   return (
     <div className="relative min-h-screen overflow-hidden">

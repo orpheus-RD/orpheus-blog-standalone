@@ -140,22 +140,21 @@ export default function Photography() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-black/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <Camera className="w-5 h-5 text-white/60" />
-              <h1 className="text-lg font-medium text-white">Photography</h1>
-            </div>
-            <span className="text-sm text-white/40">{photos.length} works</span>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background pt-24 pb-16">
+      {/* Header - Matching Magazine style */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="container mx-auto px-4 md:px-6 mb-8 md:mb-12"
+      >
+        <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-white mb-3 md:mb-4">
+          Photography
+        </h1>
+      </motion.div>
 
       {/* Masonry Grid */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="container mx-auto px-4 md:px-6">
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
           {photos.map((photo, index) => (
             <motion.div

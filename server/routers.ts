@@ -267,6 +267,67 @@ export const appRouter = router({
       }),
   }),
 
+  // ==================== Backgrounds API ====================
+  backgrounds: router({
+    list: publicProcedure
+      .input(z.object({
+        active: z.boolean().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        // For public access, only show active backgrounds
+        return await db.getAllBackgrounds({ ...input, active: true });
+      }),
+
+    listAll: adminProcedure
+      .input(z.object({
+        active: z.boolean().optional(),
+        limit: z.number().optional(),
+      }).optional())
+      .query(async ({ input }) => {
+        // Admin can see all backgrounds
+        return await db.getAllBackgrounds(input);
+      }),
+
+    get: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return await db.getBackgroundById(input.id);
+      }),
+
+    create: adminProcedure
+      .input(z.object({
+        title: z.string().optional(),
+        imageUrl: z.string(),
+        imageKey: z.string().optional(),
+        active: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return await db.createBackground(input);
+      }),
+
+    update: adminProcedure
+      .input(z.object({
+        id: z.number(),
+        title: z.string().optional(),
+        imageUrl: z.string().optional(),
+        imageKey: z.string().optional(),
+        active: z.boolean().optional(),
+        sortOrder: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const { id, ...data } = input;
+        return await db.updateBackground(id, data);
+      }),
+
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        return await db.deleteBackground(input.id);
+      }),
+  }),
+
   // ==================== Upload API ====================
   upload: router({
     image: adminProcedure

@@ -205,7 +205,7 @@ export default function Magazine() {
             <article className="max-w-3xl mx-auto">
               <div className="prose prose-lg prose-invert prose-p:text-white/80 prose-p:leading-relaxed prose-p:font-body prose-headings:font-display prose-headings:text-white max-w-none">
                 {selectedEssay.content.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="mb-5 md:mb-6 text-base md:text-lg leading-relaxed text-white/80 font-body">
+                  <p key={index} className="mb-6 md:mb-8 text-base md:text-lg leading-[1.9] md:leading-[2] text-white/80 font-body text-justify">
                     {paragraph}
                   </p>
                 ))}
@@ -307,19 +307,19 @@ export default function Magazine() {
                 }}
                 aria-label={`阅读文章: ${essay.title}`}
               >
-                {/* Image Container - Rounded with category badge */}
+                {/* Image Container - Rounded with category badge, fixed aspect ratio */}
                 <div className="relative overflow-hidden rounded-xl md:rounded-2xl mb-4 md:mb-5 bg-white/5">
-                  <div className="relative">
-                    {/* Image maintains natural aspect ratio within container */}
+                  <div className="relative aspect-[4/3]">
+                    {/* Image with consistent aspect ratio using object-cover */}
                     {essay.coverImage ? (
                       <img
                         src={essay.coverImage}
                         alt={essay.title}
-                        className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                         loading="lazy"
                       />
                     ) : (
-                      <div className="aspect-[4/3] bg-white/10" />
+                      <div className="w-full h-full bg-white/10" />
                     )}
                   </div>
                   

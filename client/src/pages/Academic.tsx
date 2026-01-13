@@ -58,25 +58,48 @@ export default function Academic() {
 
   const handleDownload = async (pdfUrl?: string, title?: string) => {
     if (pdfUrl) {
-      try {
-        // Try to download the file
-        const response = await fetch(pdfUrl);
-        if (!response.ok) {
-          throw new Error('Download failed');
+      // Check if mobile device
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // On mobile, directly open PDF in new tab/window
+        // This is more reliable on mobile browsers
+        const link = document.createElement('a');
+        link.href = pdfUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        // Force download attribute for supported browsers
+        if (title) {
+          link.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
         }
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = title ? `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf` : 'paper.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        toast.success("PDF下载成功");
-      } catch (error) {
-        // Fallback to opening in new tab
-        window.open(pdfUrl, "_blank");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("PDF已打开");
+      } else {
+        // Desktop: try blob download first
+        try {
+          const response = await fetch(pdfUrl, {
+            mode: 'cors',
+            credentials: 'omit'
+          });
+          if (!response.ok) {
+            throw new Error('Download failed');
+          }
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = title ? `${title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf` : 'paper.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          toast.success("PDF下载成功");
+        } catch (error) {
+          // Fallback to opening in new tab
+          window.open(pdfUrl, "_blank", "noopener,noreferrer");
+        }
       }
     } else {
       toast("Coming Soon", {
@@ -138,15 +161,11 @@ export default function Academic() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="container mx-auto px-6 mb-12"
+        className="container mx-auto px-4 md:px-6 mb-8 md:mb-12"
       >
-        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4">
-          Academic Papers
+        <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-semibold text-white mb-3 md:mb-4">
+          Academic
         </h1>
-        <p className="font-body text-lg text-white/60 max-w-2xl">
-          Scholarly articles and research publications exploring the intersections
-          of visual culture, phenomenology, and aesthetic theory.
-        </p>
       </motion.div>
 
       {/* Papers List */}
