@@ -199,16 +199,19 @@ export default function AdminPhotos() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-display font-semibold text-slate-900">
-            摄影作品
+          <h1 className="text-3xl font-semibold text-white">
+            Photography
           </h1>
-          <p className="text-slate-500 mt-1">
-            管理您的摄影作品集
+          <p className="text-neutral-400 mt-1">
+            Manage your photography portfolio
           </p>
         </div>
-        <Button onClick={openCreateDialog}>
+        <Button 
+          onClick={openCreateDialog}
+          className="bg-white text-black hover:bg-neutral-200"
+        >
           <Plus className="h-4 w-4 mr-2" />
-          添加照片
+          Add Photo
         </Button>
       </div>
 
@@ -216,11 +219,11 @@ export default function AdminPhotos() {
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="border-0 shadow-sm animate-pulse">
-              <div className="aspect-[4/3] bg-slate-200" />
+            <Card key={i} className="bg-neutral-900 border-neutral-800 animate-pulse">
+              <div className="aspect-[4/3] bg-neutral-800" />
               <CardContent className="p-4">
-                <div className="h-4 bg-slate-200 rounded w-3/4 mb-2" />
-                <div className="h-3 bg-slate-200 rounded w-1/2" />
+                <div className="h-4 bg-neutral-800 rounded w-3/4 mb-2" />
+                <div className="h-3 bg-neutral-800 rounded w-1/2" />
               </CardContent>
             </Card>
           ))}
@@ -228,7 +231,7 @@ export default function AdminPhotos() {
       ) : photos && photos.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {photos.map((photo) => (
-            <Card key={photo.id} className="border-0 shadow-sm overflow-hidden group">
+            <Card key={photo.id} className="bg-neutral-900 border-neutral-800 overflow-hidden group">
               <div className="aspect-[4/3] relative">
                 <img
                   src={photo.imageUrl}
@@ -236,15 +239,16 @@ export default function AdminPhotos() {
                   className="w-full h-full object-cover"
                 />
                 {photo.featured && (
-                  <span className="absolute top-2 left-2 px-2 py-1 bg-yellow-500 text-white text-xs rounded-full">
-                    精选
+                  <span className="absolute top-2 left-2 px-2 py-1 bg-yellow-500/90 text-black text-xs rounded-full font-medium">
+                    Featured
                   </span>
                 )}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                   <Button
                     size="sm"
                     variant="secondary"
                     onClick={() => openEditDialog(photo)}
+                    className="bg-white text-black hover:bg-neutral-200"
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -255,17 +259,18 @@ export default function AdminPhotos() {
                       setDeletingId(photo.id);
                       setIsDeleteDialogOpen(true);
                     }}
+                    className="bg-red-600 hover:bg-red-700"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
               <CardContent className="p-4">
-                <h3 className="font-medium text-slate-900 truncate">
+                <h3 className="font-medium text-white truncate">
                   {photo.title}
                 </h3>
                 {photo.location && (
-                  <p className="text-sm text-slate-500 truncate mt-1">
+                  <p className="text-sm text-neutral-500 truncate mt-1">
                     📍 {photo.location}
                   </p>
                 )}
@@ -274,20 +279,23 @@ export default function AdminPhotos() {
           ))}
         </div>
       ) : (
-        <Card className="border-0 shadow-sm">
+        <Card className="bg-neutral-900 border-neutral-800">
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <div className="p-4 rounded-full bg-slate-100 mb-4">
-              <Camera className="h-8 w-8 text-slate-400" />
+            <div className="p-4 rounded-full bg-neutral-800 mb-4">
+              <Camera className="h-8 w-8 text-neutral-500" />
             </div>
-            <h3 className="text-lg font-medium text-slate-900 mb-2">
-              暂无照片
+            <h3 className="text-lg font-medium text-white mb-2">
+              No Photos Yet
             </h3>
-            <p className="text-slate-500 mb-4">
-              开始上传您的摄影作品吧
+            <p className="text-neutral-500 mb-4">
+              Start uploading your photography work
             </p>
-            <Button onClick={openCreateDialog}>
+            <Button 
+              onClick={openCreateDialog}
+              className="bg-white text-black hover:bg-neutral-200"
+            >
               <Plus className="h-4 w-4 mr-2" />
-              添加照片
+              Add Photo
             </Button>
           </CardContent>
         </Card>
@@ -295,22 +303,22 @@ export default function AdminPhotos() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-neutral-900 border-neutral-800">
           <DialogHeader>
-            <DialogTitle>
-              {editingId ? "编辑照片" : "添加照片"}
+            <DialogTitle className="text-white">
+              {editingId ? "Edit Photo" : "Add Photo"}
             </DialogTitle>
-            <DialogDescription>
-              {editingId ? "修改照片信息" : "上传新的摄影作品"}
+            <DialogDescription className="text-neutral-400">
+              {editingId ? "Update photo information" : "Upload a new photo"}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             {/* Image Upload */}
             <div className="space-y-2">
-              <Label>照片 *</Label>
+              <Label className="text-neutral-300">Photo *</Label>
               {formData.imageUrl ? (
-                <div className="relative aspect-video rounded-lg overflow-hidden bg-slate-100">
+                <div className="relative aspect-video rounded-lg overflow-hidden bg-neutral-800">
                   <img
                     src={formData.imageUrl}
                     alt="Preview"
@@ -327,19 +335,19 @@ export default function AdminPhotos() {
                 </div>
               ) : (
                 <div
-                  className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center cursor-pointer hover:border-slate-400 transition-colors"
+                  className="border-2 border-dashed border-neutral-700 rounded-lg p-8 text-center cursor-pointer hover:border-neutral-600 transition-colors bg-neutral-800/50"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {isUploading ? (
                     <div className="flex flex-col items-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-600 mb-2" />
-                      <p className="text-slate-500">上传中...</p>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mb-2" />
+                      <p className="text-neutral-400">Uploading...</p>
                     </div>
                   ) : (
                     <>
-                      <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                      <p className="text-slate-500">点击上传图片</p>
-                      <p className="text-xs text-slate-400 mt-1">支持 JPG, PNG, WebP，最大 10MB</p>
+                      <Upload className="h-8 w-8 text-neutral-500 mx-auto mb-2" />
+                      <p className="text-neutral-400">Click to upload image</p>
+                      <p className="text-xs text-neutral-500 mt-1">Supports JPG, PNG, WebP, max 10MB</p>
                     </>
                   )}
                 </div>
@@ -355,89 +363,97 @@ export default function AdminPhotos() {
 
             {/* Title */}
             <div className="space-y-2">
-              <Label htmlFor="title">标题 *</Label>
+              <Label htmlFor="title" className="text-neutral-300">Title *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="输入照片标题"
+                placeholder="Enter photo title"
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* Description */}
             <div className="space-y-2">
-              <Label htmlFor="description">描述</Label>
+              <Label htmlFor="description" className="text-neutral-300">Description</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="描述这张照片..."
+                placeholder="Describe this photo..."
                 rows={3}
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* Location */}
             <div className="space-y-2">
-              <Label htmlFor="location">拍摄地点</Label>
+              <Label htmlFor="location" className="text-neutral-300">Location</Label>
               <Input
                 id="location"
                 value={formData.location}
                 onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                placeholder="如：苏格兰高地"
+                placeholder="e.g., Scottish Highlands"
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* Camera Info */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="camera">相机</Label>
+                <Label htmlFor="camera" className="text-neutral-300">Camera</Label>
                 <Input
                   id="camera"
                   value={formData.camera}
                   onChange={(e) => setFormData(prev => ({ ...prev, camera: e.target.value }))}
-                  placeholder="如：Fujifilm X-T4"
+                  placeholder="e.g., Fujifilm X-T4"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lens">镜头</Label>
+                <Label htmlFor="lens" className="text-neutral-300">Lens</Label>
                 <Input
                   id="lens"
                   value={formData.lens}
                   onChange={(e) => setFormData(prev => ({ ...prev, lens: e.target.value }))}
-                  placeholder="如：XF 23mm f/1.4"
+                  placeholder="e.g., XF 23mm f/1.4"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
             </div>
 
             {/* Settings */}
             <div className="space-y-2">
-              <Label htmlFor="settings">拍摄参数</Label>
+              <Label htmlFor="settings" className="text-neutral-300">Camera Settings</Label>
               <Input
                 id="settings"
                 value={formData.settings}
                 onChange={(e) => setFormData(prev => ({ ...prev, settings: e.target.value }))}
-                placeholder="如：f/2.8, 1/250s, ISO 400"
+                placeholder="e.g., f/2.8, 1/250s, ISO 400"
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* Category & Tags */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="category">分类</Label>
+                <Label htmlFor="category" className="text-neutral-300">Category</Label>
                 <Input
                   id="category"
                   value={formData.category}
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  placeholder="如：风景、人文、街拍"
+                  placeholder="e.g., Landscape, Portrait"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="tags">标签</Label>
+                <Label htmlFor="tags" className="text-neutral-300">Tags</Label>
                 <Input
                   id="tags"
                   value={formData.tags}
                   onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
-                  placeholder="用逗号分隔"
+                  placeholder="Comma separated"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
             </div>
@@ -450,30 +466,35 @@ export default function AdminPhotos() {
                   checked={formData.featured}
                   onCheckedChange={(checked) => setFormData(prev => ({ ...prev, featured: checked }))}
                 />
-                <Label htmlFor="featured">设为精选</Label>
+                <Label htmlFor="featured" className="text-neutral-300">Featured</Label>
               </div>
               <div className="flex items-center gap-2">
-                <Label htmlFor="sortOrder">排序</Label>
+                <Label htmlFor="sortOrder" className="text-neutral-300">Sort Order</Label>
                 <Input
                   id="sortOrder"
                   type="number"
                   value={formData.sortOrder}
                   onChange={(e) => setFormData(prev => ({ ...prev, sortOrder: parseInt(e.target.value) || 0 }))}
-                  className="w-20"
+                  className="w-20 bg-neutral-800 border-neutral-700 text-white"
                 />
               </div>
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={closeDialog}>
-              取消
+            <Button 
+              variant="outline" 
+              onClick={closeDialog}
+              className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+            >
+              Cancel
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={createMutation.isPending || updateMutation.isPending}
+              className="bg-white text-black hover:bg-neutral-200"
             >
-              {createMutation.isPending || updateMutation.isPending ? "保存中..." : "保存"}
+              {createMutation.isPending || updateMutation.isPending ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -481,23 +502,28 @@ export default function AdminPhotos() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-neutral-900 border-neutral-800">
           <DialogHeader>
-            <DialogTitle>确认删除</DialogTitle>
-            <DialogDescription>
-              确定要删除这张照片吗？此操作无法撤销。
+            <DialogTitle className="text-white">Confirm Delete</DialogTitle>
+            <DialogDescription className="text-neutral-400">
+              Are you sure you want to delete this photo? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              取消
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteDialogOpen(false)}
+              className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+            >
+              Cancel
             </Button>
             <Button
               variant="destructive"
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
+              className="bg-red-600 hover:bg-red-700"
             >
-              {deleteMutation.isPending ? "删除中..." : "删除"}
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>

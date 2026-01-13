@@ -29,7 +29,8 @@ import {
   LogOut, 
   PanelLeft, 
   Settings,
-  LayoutDashboard
+  LayoutDashboard,
+  Image
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation, Route, Switch } from "wouter";
@@ -44,10 +45,11 @@ import AdminSettings from "./admin/AdminSettings";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/admin" },
-  { icon: Camera, label: "摄影作品", path: "/admin/photos" },
-  { icon: FileText, label: "杂志随笔", path: "/admin/essays" },
-  { icon: GraduationCap, label: "学术论文", path: "/admin/papers" },
-  { icon: Settings, label: "设置", path: "/admin/settings" },
+  { icon: Camera, label: "Photography", path: "/admin/photos" },
+  { icon: FileText, label: "Magazine", path: "/admin/essays" },
+  { icon: GraduationCap, label: "Academic", path: "/admin/papers" },
+  { icon: Image, label: "Backgrounds", path: "/admin/backgrounds" },
+  { icon: Settings, label: "Settings", path: "/admin/settings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "admin-sidebar-width";
@@ -72,16 +74,16 @@ export default function Admin() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full bg-white rounded-2xl shadow-lg">
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full bg-neutral-900 rounded-2xl border border-neutral-800">
           <div className="flex flex-col items-center gap-6">
-            <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center">
+            <div className="w-16 h-16 bg-neutral-800 rounded-2xl flex items-center justify-center border border-neutral-700">
               <span className="text-white font-display text-2xl">O</span>
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-center">
-              Orpheus 后台管理
+            <h1 className="text-2xl font-semibold tracking-tight text-center text-white">
+              Orpheus Admin
             </h1>
-            <p className="text-sm text-muted-foreground text-center max-w-sm">
+            <p className="text-sm text-neutral-400 text-center max-w-sm">
               请登录以访问后台管理系统
             </p>
           </div>
@@ -90,7 +92,7 @@ export default function Admin() {
               window.location.href = "/admin/login";
             }}
             size="lg"
-            className="w-full shadow-lg hover:shadow-xl transition-all"
+            className="w-full bg-white text-black hover:bg-neutral-200 transition-all"
           >
             登录
           </Button>
@@ -102,16 +104,16 @@ export default function Admin() {
   // Check if user is admin
   if (user.role !== 'admin') {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full bg-white rounded-2xl shadow-lg">
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full bg-neutral-900 rounded-2xl border border-neutral-800">
           <div className="flex flex-col items-center gap-6">
-            <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center">
-              <span className="text-red-600 text-3xl">⚠</span>
+            <div className="w-16 h-16 bg-red-900/30 rounded-2xl flex items-center justify-center border border-red-800/50">
+              <span className="text-red-400 text-3xl">⚠</span>
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight text-center">
+            <h1 className="text-2xl font-semibold tracking-tight text-center text-white">
               权限不足
             </h1>
-            <p className="text-sm text-muted-foreground text-center max-w-sm">
+            <p className="text-sm text-neutral-400 text-center max-w-sm">
               您没有访问后台管理系统的权限。请联系管理员。
             </p>
           </div>
@@ -119,7 +121,7 @@ export default function Admin() {
             onClick={() => window.location.href = '/'}
             variant="outline"
             size="lg"
-            className="w-full"
+            className="w-full border-neutral-700 text-white hover:bg-neutral-800"
           >
             <Home className="mr-2 h-4 w-4" />
             返回首页
@@ -199,32 +201,29 @@ function AdminLayoutContent({ setSidebarWidth }: AdminLayoutContentProps) {
       <div className="relative" ref={sidebarRef}>
         <Sidebar
           collapsible="icon"
-          className="border-r-0 bg-slate-900"
+          className="border-r border-neutral-800 bg-black"
           disableTransition={isResizing}
         >
-          <SidebarHeader className="h-16 justify-center border-b border-slate-800">
+          <SidebarHeader className="h-16 justify-center border-b border-neutral-800">
             <div className="flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
-                className="h-8 w-8 flex items-center justify-center hover:bg-slate-800 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
+                className="h-8 w-8 flex items-center justify-center hover:bg-neutral-800 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
                 aria-label="Toggle navigation"
               >
-                <PanelLeft className="h-4 w-4 text-slate-400" />
+                <PanelLeft className="h-4 w-4 text-neutral-400" />
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-display text-lg text-white truncate">
-                    Orpheus
-                  </span>
-                  <span className="text-xs text-slate-500 uppercase tracking-wider">
-                    Admin
+                  <span className="font-semibold text-white truncate">
+                    Orpheus Admin
                   </span>
                 </div>
               ) : null}
             </div>
           </SidebarHeader>
 
-          <SidebarContent className="gap-0 bg-slate-900">
+          <SidebarContent className="gap-0 bg-black">
             <SidebarMenu className="px-2 py-3">
               {menuItems.map(item => {
                 const isActive = location === item.path || 
@@ -235,12 +234,12 @@ function AdminLayoutContent({ setSidebarWidth }: AdminLayoutContentProps) {
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal text-slate-300 hover:text-white hover:bg-slate-800 ${
-                        isActive ? "bg-slate-800 text-white" : ""
+                      className={`h-10 transition-all font-normal text-neutral-400 hover:text-white hover:bg-neutral-800/50 ${
+                        isActive ? "bg-neutral-800 text-white" : ""
                       }`}
                     >
                       <item.icon
-                        className={`h-4 w-4 ${isActive ? "text-white" : "text-slate-400"}`}
+                        className={`h-4 w-4 ${isActive ? "text-white" : "text-neutral-500"}`}
                       />
                       <span>{item.label}</span>
                     </SidebarMenuButton>
@@ -250,24 +249,24 @@ function AdminLayoutContent({ setSidebarWidth }: AdminLayoutContentProps) {
             </SidebarMenu>
 
             {/* Back to site link */}
-            <div className="px-2 mt-auto">
+            <div className="px-2 mt-auto pb-2">
               <SidebarMenuButton
                 onClick={() => window.location.href = '/'}
-                tooltip="返回网站"
-                className="h-10 text-slate-400 hover:text-white hover:bg-slate-800"
+                tooltip="View Site"
+                className="h-10 text-neutral-500 hover:text-white hover:bg-neutral-800/50"
               >
                 <Home className="h-4 w-4" />
-                <span>返回网站</span>
+                <span>View Site</span>
               </SidebarMenuButton>
             </div>
           </SidebarContent>
 
-          <SidebarFooter className="p-3 bg-slate-900 border-t border-slate-800">
+          <SidebarFooter className="p-3 bg-black border-t border-neutral-800">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 rounded-lg px-1 py-1 hover:bg-slate-800 transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <Avatar className="h-9 w-9 border border-slate-700 shrink-0">
-                    <AvatarFallback className="text-xs font-medium bg-slate-700 text-white">
+                <button className="flex items-center gap-3 rounded-lg px-1 py-1 hover:bg-neutral-800/50 transition-colors w-full text-left group-data-[collapsible=icon]:justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <Avatar className="h-9 w-9 border border-neutral-700 shrink-0 bg-neutral-800">
+                    <AvatarFallback className="text-xs font-medium bg-neutral-700 text-white">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -275,16 +274,16 @@ function AdminLayoutContent({ setSidebarWidth }: AdminLayoutContentProps) {
                     <p className="text-sm font-medium truncate leading-none text-white">
                       {user?.name || "-"}
                     </p>
-                    <p className="text-xs text-slate-400 truncate mt-1.5">
-                      {user?.email || "-"}
+                    <p className="text-xs text-neutral-500 truncate mt-1">
+                      Admin
                     </p>
                   </div>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-48 bg-neutral-900 border-neutral-800">
                 <DropdownMenuItem
                   onClick={logout}
-                  className="cursor-pointer text-destructive focus:text-destructive"
+                  className="cursor-pointer text-red-400 focus:text-red-400 focus:bg-neutral-800"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>退出登录</span>
@@ -294,7 +293,7 @@ function AdminLayoutContent({ setSidebarWidth }: AdminLayoutContentProps) {
           </SidebarFooter>
         </Sidebar>
         <div
-          className={`absolute top-0 right-0 w-1 h-full cursor-col-resize hover:bg-primary/20 transition-colors ${isCollapsed ? "hidden" : ""}`}
+          className={`absolute top-0 right-0 w-1 h-full cursor-col-resize hover:bg-neutral-600 transition-colors ${isCollapsed ? "hidden" : ""}`}
           onMouseDown={() => {
             if (isCollapsed) return;
             setIsResizing(true);
@@ -303,14 +302,14 @@ function AdminLayoutContent({ setSidebarWidth }: AdminLayoutContentProps) {
         />
       </div>
 
-      <SidebarInset className="bg-slate-50">
+      <SidebarInset className="bg-black">
         {isMobile && (
-          <div className="flex border-b h-14 items-center justify-between bg-white px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
+          <div className="flex border-b border-neutral-800 h-14 items-center justify-between bg-black px-2 backdrop-blur supports-[backdrop-filter]:backdrop-blur sticky top-0 z-40">
             <div className="flex items-center gap-2">
-              <SidebarTrigger className="h-9 w-9 rounded-lg bg-background" />
+              <SidebarTrigger className="h-9 w-9 rounded-lg bg-neutral-900 text-white" />
               <div className="flex items-center gap-3">
                 <div className="flex flex-col gap-1">
-                  <span className="tracking-tight text-foreground font-medium">
+                  <span className="tracking-tight text-white font-medium">
                     {activeMenuItem?.label ?? "Menu"}
                   </span>
                 </div>

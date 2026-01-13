@@ -136,19 +136,10 @@ export default function Layout({ children }: LayoutProps) {
       {!isHomePage && (
         <footer className="glass border-t border-white/10 py-8">
           <div className="container mx-auto px-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center justify-center">
               <p className="font-nav text-sm text-white/50">
                 © {new Date().getFullYear()} Orpheus. All rights reserved.
               </p>
-              <div className="flex items-center gap-6">
-                {navItems.map((item) => (
-                  <Link key={item.path} href={item.path}>
-                    <span className="font-nav text-xs tracking-widest uppercase text-white/50 hover:text-white/80 transition-colors">
-                      {item.label}
-                    </span>
-                  </Link>
-                ))}
-              </div>
             </div>
           </div>
         </footer>

@@ -9,43 +9,43 @@ export default function AdminSettings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-display font-semibold text-slate-900">
-          设置
+        <h1 className="text-3xl font-semibold text-white">
+          Settings
         </h1>
-        <p className="text-slate-500 mt-1">
-          管理您的博客设置
+        <p className="text-neutral-400 mt-1">
+          Manage your blog settings
         </p>
       </div>
 
       {/* Settings Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Profile */}
-        <Card className="border-0 shadow-sm">
+        <Card className="bg-neutral-900 border-neutral-800">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-50">
-                <User className="h-5 w-5 text-blue-600" />
+              <div className="p-2 rounded-lg bg-neutral-800">
+                <User className="h-5 w-5 text-neutral-400" />
               </div>
               <div>
-                <CardTitle className="text-lg">个人信息</CardTitle>
-                <CardDescription>您的账户信息</CardDescription>
+                <CardTitle className="text-lg text-white">Profile</CardTitle>
+                <CardDescription className="text-neutral-500">Your account information</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-slate-500">用户名</p>
-                <p className="font-medium text-slate-900">{user?.name || "-"}</p>
+                <p className="text-sm text-neutral-500">Username</p>
+                <p className="font-medium text-white">{user?.name || "-"}</p>
               </div>
               <div>
-                <p className="text-sm text-slate-500">邮箱</p>
-                <p className="font-medium text-slate-900">{user?.email || "-"}</p>
+                <p className="text-sm text-neutral-500">Email</p>
+                <p className="font-medium text-white">{user?.email || "-"}</p>
               </div>
               <div>
-                <p className="text-sm text-slate-500">角色</p>
-                <span className="inline-flex px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-700">
-                  {user?.role === 'admin' ? '管理员' : '用户'}
+                <p className="text-sm text-neutral-500">Role</p>
+                <span className="inline-flex px-2 py-1 text-xs rounded-full bg-purple-900/30 text-purple-400 border border-purple-800/50">
+                  {user?.role === 'admin' ? 'Admin' : 'User'}
                 </span>
               </div>
             </div>
@@ -53,27 +53,27 @@ export default function AdminSettings() {
         </Card>
 
         {/* Security */}
-        <Card className="border-0 shadow-sm">
+        <Card className="bg-neutral-900 border-neutral-800">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-50">
-                <Shield className="h-5 w-5 text-green-600" />
+              <div className="p-2 rounded-lg bg-neutral-800">
+                <Shield className="h-5 w-5 text-neutral-400" />
               </div>
               <div>
-                <CardTitle className="text-lg">安全设置</CardTitle>
-                <CardDescription>账户安全相关设置</CardDescription>
+                <CardTitle className="text-lg text-white">Security</CardTitle>
+                <CardDescription className="text-neutral-500">Account security settings</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-slate-500">登录方式</p>
-                <p className="font-medium text-slate-900">{user?.loginMethod || "Manus OAuth"}</p>
+                <p className="text-sm text-neutral-500">Login Method</p>
+                <p className="font-medium text-white">{user?.loginMethod || "Manus OAuth"}</p>
               </div>
               <div>
-                <p className="text-sm text-slate-500">上次登录</p>
-                <p className="font-medium text-slate-900">
+                <p className="text-sm text-neutral-500">Last Login</p>
+                <p className="font-medium text-white">
                   {user?.lastSignedIn 
                     ? new Date(user.lastSignedIn).toLocaleString('zh-CN')
                     : "-"
@@ -85,58 +85,58 @@ export default function AdminSettings() {
         </Card>
 
         {/* Database */}
-        <Card className="border-0 shadow-sm">
+        <Card className="bg-neutral-900 border-neutral-800">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-50">
-                <Database className="h-5 w-5 text-orange-600" />
+              <div className="p-2 rounded-lg bg-neutral-800">
+                <Database className="h-5 w-5 text-neutral-400" />
               </div>
               <div>
-                <CardTitle className="text-lg">数据管理</CardTitle>
-                <CardDescription>数据库和存储信息</CardDescription>
+                <CardTitle className="text-lg text-white">Data Management</CardTitle>
+                <CardDescription className="text-neutral-500">Database and storage info</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-slate-500">数据库</p>
-                <p className="font-medium text-slate-900">MySQL / TiDB</p>
+                <p className="text-sm text-neutral-500">Database</p>
+                <p className="font-medium text-white">MySQL / TiDB</p>
               </div>
               <div>
-                <p className="text-sm text-slate-500">文件存储</p>
-                <p className="font-medium text-slate-900">S3 兼容存储</p>
+                <p className="text-sm text-neutral-500">File Storage</p>
+                <p className="font-medium text-white">S3 Compatible Storage</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* About */}
-        <Card className="border-0 shadow-sm">
+        <Card className="bg-neutral-900 border-neutral-800">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-slate-100">
-                <Settings className="h-5 w-5 text-slate-600" />
+              <div className="p-2 rounded-lg bg-neutral-800">
+                <Settings className="h-5 w-5 text-neutral-400" />
               </div>
               <div>
-                <CardTitle className="text-lg">关于</CardTitle>
-                <CardDescription>系统信息</CardDescription>
+                <CardTitle className="text-lg text-white">About</CardTitle>
+                <CardDescription className="text-neutral-500">System information</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-slate-500">系统名称</p>
-                <p className="font-medium text-slate-900">Orpheus Blog</p>
+                <p className="text-sm text-neutral-500">System Name</p>
+                <p className="font-medium text-white">Orpheus Blog</p>
               </div>
               <div>
-                <p className="text-sm text-slate-500">版本</p>
-                <p className="font-medium text-slate-900">1.0.0</p>
+                <p className="text-sm text-neutral-500">Version</p>
+                <p className="font-medium text-white">1.0.0</p>
               </div>
               <div>
-                <p className="text-sm text-slate-500">技术栈</p>
-                <p className="font-medium text-slate-900">React + tRPC + Drizzle</p>
+                <p className="text-sm text-neutral-500">Tech Stack</p>
+                <p className="font-medium text-white">React + tRPC + Drizzle</p>
               </div>
             </div>
           </CardContent>
@@ -144,13 +144,13 @@ export default function AdminSettings() {
       </div>
 
       {/* Tips */}
-      <Card className="border-0 shadow-sm bg-blue-50">
+      <Card className="bg-neutral-800/50 border-neutral-700">
         <CardContent className="p-6">
-          <h3 className="font-semibold text-blue-900 mb-2">使用提示</h3>
-          <ul className="text-sm text-blue-800 space-y-2">
-            <li>• 您可以在 <strong>摄影作品</strong> 页面上传和管理照片</li>
-            <li>• 在 <strong>杂志随笔</strong> 页面撰写和发布文章，支持 Markdown 格式</li>
-            <li>• <strong>学术论文</strong> 页面用于录入您的研究成果和论文信息</li>
+          <h3 className="font-semibold text-white mb-2">使用提示</h3>
+          <ul className="text-sm text-neutral-400 space-y-2">
+            <li>• 您可以在 <strong className="text-white">Photography</strong> 页面上传和管理照片</li>
+            <li>• 在 <strong className="text-white">Magazine</strong> 页面撰写和发布文章，支持 Markdown 格式</li>
+            <li>• <strong className="text-white">Academic</strong> 页面用于录入您的研究成果和论文信息</li>
             <li>• 所有内容默认为草稿状态，需要手动发布才能在前台显示</li>
             <li>• 图片会自动上传到云存储，无需担心服务器空间</li>
           </ul>

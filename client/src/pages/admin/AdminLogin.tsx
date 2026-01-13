@@ -48,23 +48,23 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-50">
-      <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full bg-white rounded-2xl shadow-lg">
+    <div className="flex items-center justify-center min-h-screen bg-black">
+      <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full bg-neutral-900 rounded-2xl border border-neutral-800">
         <div className="flex flex-col items-center gap-6">
-          <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center">
-            <span className="text-white font-display text-2xl">O</span>
+          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center">
+            <span className="text-black font-display text-2xl">O</span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-center">
-            Orpheus 后台管理
+          <h1 className="text-2xl font-semibold tracking-tight text-center text-white">
+            Orpheus Admin
           </h1>
-          <p className="text-sm text-muted-foreground text-center max-w-sm">
-            请输入管理员账号登录
+          <p className="text-sm text-neutral-400 text-center max-w-sm">
+            Sign in with your admin account
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="w-full space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">邮箱</Label>
+            <Label htmlFor="email" className="text-neutral-300">Email</Label>
             <Input
               id="email"
               type="email"
@@ -74,11 +74,12 @@ export default function AdminLogin() {
               required
               disabled={loading}
               autoComplete="email"
+              className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">密码</Label>
+            <Label htmlFor="password" className="text-neutral-300">Password</Label>
             <Input
               id="password"
               type="password"
@@ -88,11 +89,12 @@ export default function AdminLogin() {
               required
               disabled={loading}
               autoComplete="current-password"
+              className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
             />
           </div>
 
           {error && (
-            <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">
+            <div className="p-3 text-sm text-red-400 bg-red-900/20 rounded-lg border border-red-800/50">
               {error}
             </div>
           )}
@@ -100,16 +102,16 @@ export default function AdminLogin() {
           <Button
             type="submit"
             size="lg"
-            className="w-full shadow-lg hover:shadow-xl transition-all"
+            className="w-full bg-white text-black hover:bg-neutral-200 transition-all"
             disabled={loading}
           >
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                登录中...
+                Signing in...
               </>
             ) : (
-              "登录"
+              "Sign In"
             )}
           </Button>
         </form>
@@ -117,9 +119,9 @@ export default function AdminLogin() {
         <Button
           variant="ghost"
           onClick={() => window.location.href = "/"}
-          className="text-muted-foreground"
+          className="text-neutral-400 hover:text-white hover:bg-neutral-800"
         >
-          返回首页
+          Back to Home
         </Button>
       </div>
     </div>

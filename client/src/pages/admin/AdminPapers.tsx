@@ -223,16 +223,19 @@ export default function AdminPapers() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-display font-semibold text-slate-900">
-            学术论文
+          <h1 className="text-3xl font-semibold text-white">
+            Academic Papers
           </h1>
-          <p className="text-slate-500 mt-1">
-            管理您的学术论文和研究成果
+          <p className="text-neutral-400 mt-1">
+            Manage your research publications
           </p>
         </div>
-        <Button onClick={openCreateDialog}>
+        <Button 
+          onClick={openCreateDialog}
+          className="bg-white text-black hover:bg-neutral-200"
+        >
           <Plus className="h-4 w-4 mr-2" />
-          添加论文
+          Add Paper
         </Button>
       </div>
 
@@ -240,11 +243,11 @@ export default function AdminPapers() {
       {isLoading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="border-0 shadow-sm animate-pulse">
+            <Card key={i} className="bg-neutral-900 border-neutral-800 animate-pulse">
               <CardContent className="p-6">
-                <div className="h-5 bg-slate-200 rounded w-2/3 mb-2" />
-                <div className="h-4 bg-slate-200 rounded w-1/2 mb-2" />
-                <div className="h-3 bg-slate-200 rounded w-1/3" />
+                <div className="h-5 bg-neutral-800 rounded w-2/3 mb-2" />
+                <div className="h-4 bg-neutral-800 rounded w-1/2 mb-2" />
+                <div className="h-3 bg-neutral-800 rounded w-1/3" />
               </CardContent>
             </Card>
           ))}
@@ -252,44 +255,25 @@ export default function AdminPapers() {
       ) : papers && papers.length > 0 ? (
         <div className="space-y-4">
           {papers.map((paper) => (
-            <Card key={paper.id} className="border-0 shadow-sm">
+            <Card key={paper.id} className="bg-neutral-900 border-neutral-800">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-slate-900 leading-tight">
+                    <h3 className="font-semibold text-white leading-tight">
                       {paper.title}
                     </h3>
-                    <p className="text-sm text-slate-600 mt-1">
+                    <p className="text-sm text-neutral-400 mt-1">
                       {paper.authors}
                     </p>
                     <div className="flex flex-wrap items-center gap-3 mt-2">
-                      <span
-                        className={`px-2 py-0.5 text-xs rounded-full ${
-                          paper.published
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        }`}
-                      >
-                        {paper.published ? "已发布" : "草稿"}
-                      </span>
-                      {paper.featured && (
-                        <span className="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-700">
-                          精选
-                        </span>
-                      )}
-                      {paper.pdfUrl && (
-                        <span className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">
-                          有PDF
-                        </span>
-                      )}
                       {paper.journal && (
-                        <span className="text-xs text-slate-500">
+                        <span className="text-sm text-neutral-500">
                           {paper.journal}
                         </span>
                       )}
                       {paper.year && (
-                        <span className="text-xs text-slate-500">
-                          {paper.year}
+                        <span className="text-sm text-neutral-500">
+                          · {paper.year}
                         </span>
                       )}
                       {paper.doi && (
@@ -297,47 +281,31 @@ export default function AdminPapers() {
                           href={`https://doi.org/${paper.doi}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                          className="text-sm text-neutral-400 hover:text-white flex items-center gap-1"
                         >
-                          DOI <ExternalLink className="h-3 w-3" />
+                          <ExternalLink className="h-3 w-3" /> DOI: {paper.doi}
                         </a>
-                      )}
-                      {paper.citations !== null && paper.citations > 0 && (
-                        <span className="text-xs text-slate-500">
-                          被引 {paper.citations} 次
-                        </span>
                       )}
                     </div>
                     {paper.abstract && (
-                      <p className="text-sm text-slate-500 mt-3 line-clamp-2">
+                      <p className="text-sm text-neutral-500 mt-3 line-clamp-2">
                         {paper.abstract}
                       </p>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0">
                     <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => togglePublish(paper)}
-                      title={paper.published ? "取消发布" : "发布"}
-                    >
-                      {paper.published ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
-                    <Button
-                      size="sm"
+                      size="icon"
                       variant="ghost"
                       onClick={() => openEditDialog(paper)}
+                      className="h-8 w-8 text-neutral-400 hover:text-white hover:bg-neutral-800"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button
-                      size="sm"
+                      size="icon"
                       variant="ghost"
-                      className="text-destructive hover:text-destructive"
+                      className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-neutral-800"
                       onClick={() => {
                         setDeletingId(paper.id);
                         setIsDeleteDialogOpen(true);
@@ -352,20 +320,23 @@ export default function AdminPapers() {
           ))}
         </div>
       ) : (
-        <Card className="border-0 shadow-sm">
+        <Card className="bg-neutral-900 border-neutral-800">
           <CardContent className="flex flex-col items-center justify-center py-16">
-            <div className="p-4 rounded-full bg-slate-100 mb-4">
-              <GraduationCap className="h-8 w-8 text-slate-400" />
+            <div className="p-4 rounded-full bg-neutral-800 mb-4">
+              <GraduationCap className="h-8 w-8 text-neutral-500" />
             </div>
-            <h3 className="text-lg font-medium text-slate-900 mb-2">
-              暂无论文
+            <h3 className="text-lg font-medium text-white mb-2">
+              No Papers Yet
             </h3>
-            <p className="text-slate-500 mb-4">
-              添加您的学术论文和研究成果
+            <p className="text-neutral-500 mb-4">
+              Add your academic papers and research publications
             </p>
-            <Button onClick={openCreateDialog}>
+            <Button 
+              onClick={openCreateDialog}
+              className="bg-white text-black hover:bg-neutral-200"
+            >
               <Plus className="h-4 w-4 mr-2" />
-              添加论文
+              Add Paper
             </Button>
           </CardContent>
         </Card>
@@ -373,69 +344,74 @@ export default function AdminPapers() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-neutral-900 border-neutral-800">
           <DialogHeader>
-            <DialogTitle>
-              {editingId ? "编辑论文" : "添加论文"}
+            <DialogTitle className="text-white">
+              {editingId ? "Edit Paper" : "Add Paper"}
             </DialogTitle>
-            <DialogDescription>
-              {editingId ? "修改论文信息" : "录入新的学术论文"}
+            <DialogDescription className="text-neutral-400">
+              {editingId ? "Update paper information" : "Add a new academic paper"}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             {/* Title */}
             <div className="space-y-2">
-              <Label htmlFor="title">论文标题 *</Label>
+              <Label htmlFor="title" className="text-neutral-300">Title *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="输入论文标题"
+                placeholder="Enter paper title"
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* Authors */}
             <div className="space-y-2">
-              <Label htmlFor="authors">作者 *</Label>
+              <Label htmlFor="authors" className="text-neutral-300">Authors *</Label>
               <Input
                 id="authors"
                 value={formData.authors}
                 onChange={(e) => setFormData(prev => ({ ...prev, authors: e.target.value }))}
-                placeholder="如：Zhang, X., Li, Y., Wang, Z."
+                placeholder="e.g., Zhang, X., Li, Y., Wang, Z."
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* Abstract */}
             <div className="space-y-2">
-              <Label htmlFor="abstract">摘要</Label>
+              <Label htmlFor="abstract" className="text-neutral-300">Abstract</Label>
               <Textarea
                 id="abstract"
                 value={formData.abstract}
                 onChange={(e) => setFormData(prev => ({ ...prev, abstract: e.target.value }))}
-                placeholder="论文摘要..."
+                placeholder="Paper abstract..."
                 rows={4}
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* Journal & Year */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="journal">期刊/会议</Label>
+                <Label htmlFor="journal" className="text-neutral-300">Journal/Conference</Label>
                 <Input
                   id="journal"
                   value={formData.journal}
                   onChange={(e) => setFormData(prev => ({ ...prev, journal: e.target.value }))}
-                  placeholder="如：Nature, Science"
+                  placeholder="e.g., Nature, Science"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="year">年份</Label>
+                <Label htmlFor="year" className="text-neutral-300">Year</Label>
                 <Input
                   id="year"
                   type="number"
                   value={formData.year}
                   onChange={(e) => setFormData(prev => ({ ...prev, year: parseInt(e.target.value) || new Date().getFullYear() }))}
+                  className="bg-neutral-800 border-neutral-700 text-white"
                 />
               </div>
             </div>
@@ -443,68 +419,72 @@ export default function AdminPapers() {
             {/* Volume, Issue, Pages */}
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="volume">卷号</Label>
+                <Label htmlFor="volume" className="text-neutral-300">Volume</Label>
                 <Input
                   id="volume"
                   value={formData.volume}
                   onChange={(e) => setFormData(prev => ({ ...prev, volume: e.target.value }))}
-                  placeholder="如：12"
+                  placeholder="e.g., 12"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="issue">期号</Label>
+                <Label htmlFor="issue" className="text-neutral-300">Issue</Label>
                 <Input
                   id="issue"
                   value={formData.issue}
                   onChange={(e) => setFormData(prev => ({ ...prev, issue: e.target.value }))}
-                  placeholder="如：3"
+                  placeholder="e.g., 3"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="pages">页码</Label>
+                <Label htmlFor="pages" className="text-neutral-300">Pages</Label>
                 <Input
                   id="pages"
                   value={formData.pages}
                   onChange={(e) => setFormData(prev => ({ ...prev, pages: e.target.value }))}
-                  placeholder="如：123-145"
+                  placeholder="e.g., 123-145"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
             </div>
 
             {/* DOI */}
             <div className="space-y-2">
-              <Label htmlFor="doi">DOI</Label>
+              <Label htmlFor="doi" className="text-neutral-300">DOI</Label>
               <Input
                 id="doi"
                 value={formData.doi}
                 onChange={(e) => setFormData(prev => ({ ...prev, doi: e.target.value }))}
-                placeholder="如：10.1000/xyz123"
+                placeholder="e.g., 10.1000/xyz123"
+                className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
               />
             </div>
 
             {/* PDF Upload */}
             <div className="space-y-2">
-              <Label>PDF 文件</Label>
+              <Label className="text-neutral-300">PDF File</Label>
               {formData.pdfUrl ? (
-                <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border">
-                  <FileText className="h-8 w-8 text-red-500" />
+                <div className="flex items-center gap-3 p-3 bg-neutral-800 rounded-lg border border-neutral-700">
+                  <FileText className="h-8 w-8 text-red-400" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">
-                      PDF 已上传
+                    <p className="text-sm font-medium text-white truncate">
+                      PDF Uploaded
                     </p>
                     <a
                       href={formData.pdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:underline truncate block"
+                      className="text-xs text-neutral-400 hover:text-white truncate block"
                     >
-                      点击预览
+                      Click to preview
                     </a>
                   </div>
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-destructive hover:text-destructive"
+                    className="text-red-400 hover:text-red-300 hover:bg-neutral-700"
                     onClick={() => setFormData(prev => ({ ...prev, pdfUrl: "", pdfKey: "" }))}
                   >
                     <X className="h-4 w-4" />
@@ -514,8 +494,8 @@ export default function AdminPapers() {
                 <div
                   className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
                     isUploading
-                      ? "border-blue-300 bg-blue-50"
-                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                      ? "border-neutral-600 bg-neutral-800"
+                      : "border-neutral-700 hover:border-neutral-600 hover:bg-neutral-800/50"
                   }`}
                   onClick={() => fileInputRef.current?.click()}
                 >
@@ -528,17 +508,17 @@ export default function AdminPapers() {
                   />
                   {isUploading ? (
                     <>
-                      <div className="animate-spin h-8 w-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2" />
-                      <p className="text-sm text-slate-500">上传中...</p>
+                      <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-2" />
+                      <p className="text-sm text-neutral-400">Uploading...</p>
                     </>
                   ) : (
                     <>
-                      <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                      <p className="text-sm text-slate-500">
-                        点击上传 PDF 文件
+                      <Upload className="h-8 w-8 text-neutral-500 mx-auto mb-2" />
+                      <p className="text-sm text-neutral-400">
+                        Click to upload PDF file
                       </p>
-                      <p className="text-xs text-slate-400 mt-1">
-                        最大 50MB
+                      <p className="text-xs text-neutral-500 mt-1">
+                        Max 50MB
                       </p>
                     </>
                   )}
@@ -546,15 +526,15 @@ export default function AdminPapers() {
               )}
               {/* Manual URL input as fallback */}
               <div className="mt-2">
-                <Label htmlFor="pdfUrl" className="text-xs text-slate-500">
-                  或手动输入 PDF 链接
+                <Label htmlFor="pdfUrl" className="text-xs text-neutral-500">
+                  Or enter PDF URL manually
                 </Label>
                 <Input
                   id="pdfUrl"
                   value={formData.pdfUrl}
                   onChange={(e) => setFormData(prev => ({ ...prev, pdfUrl: e.target.value }))}
                   placeholder="https://..."
-                  className="mt-1"
+                  className="mt-1 bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
             </div>
@@ -562,21 +542,23 @@ export default function AdminPapers() {
             {/* Category & Tags */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="category">研究领域</Label>
+                <Label htmlFor="category" className="text-neutral-300">Research Field</Label>
                 <Input
                   id="category"
                   value={formData.category}
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  placeholder="如：机器学习、计算机视觉"
+                  placeholder="e.g., Machine Learning"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="tags">关键词</Label>
+                <Label htmlFor="tags" className="text-neutral-300">Keywords</Label>
                 <Input
                   id="tags"
                   value={formData.tags}
                   onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
-                  placeholder="用逗号分隔"
+                  placeholder="Comma separated"
+                  className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500"
                 />
               </div>
             </div>
@@ -590,7 +572,7 @@ export default function AdminPapers() {
                     checked={formData.featured}
                     onCheckedChange={(checked) => setFormData(prev => ({ ...prev, featured: checked }))}
                   />
-                  <Label htmlFor="featured">精选</Label>
+                  <Label htmlFor="featured" className="text-neutral-300">Featured</Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <Switch
@@ -598,31 +580,36 @@ export default function AdminPapers() {
                     checked={formData.published}
                     onCheckedChange={(checked) => setFormData(prev => ({ ...prev, published: checked }))}
                   />
-                  <Label htmlFor="published">发布</Label>
+                  <Label htmlFor="published" className="text-neutral-300">Published</Label>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Label htmlFor="citations">引用次数</Label>
+                <Label htmlFor="citations" className="text-neutral-300">Citations</Label>
                 <Input
                   id="citations"
                   type="number"
                   value={formData.citations}
                   onChange={(e) => setFormData(prev => ({ ...prev, citations: parseInt(e.target.value) || 0 }))}
-                  className="w-24"
+                  className="w-24 bg-neutral-800 border-neutral-700 text-white"
                 />
               </div>
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={closeDialog}>
-              取消
+            <Button 
+              variant="outline" 
+              onClick={closeDialog}
+              className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+            >
+              Cancel
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={createMutation.isPending || updateMutation.isPending}
+              className="bg-white text-black hover:bg-neutral-200"
             >
-              {createMutation.isPending || updateMutation.isPending ? "保存中..." : "保存"}
+              {createMutation.isPending || updateMutation.isPending ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -630,23 +617,28 @@ export default function AdminPapers() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-neutral-900 border-neutral-800">
           <DialogHeader>
-            <DialogTitle>确认删除</DialogTitle>
-            <DialogDescription>
-              确定要删除这篇论文吗？此操作无法撤销。
+            <DialogTitle className="text-white">Confirm Delete</DialogTitle>
+            <DialogDescription className="text-neutral-400">
+              Are you sure you want to delete this paper? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-              取消
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteDialogOpen(false)}
+              className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+            >
+              Cancel
             </Button>
             <Button
               variant="destructive"
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
+              className="bg-red-600 hover:bg-red-700"
             >
-              {deleteMutation.isPending ? "删除中..." : "删除"}
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>
