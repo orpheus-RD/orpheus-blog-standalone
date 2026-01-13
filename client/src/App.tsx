@@ -10,11 +10,15 @@ import Magazine from "./pages/Magazine";
 import Academic from "./pages/Academic";
 import Search from "./pages/Search";
 import Admin from "./pages/Admin";
+import AdminLogin from "./pages/admin/AdminLogin";
 import Layout from "./components/Layout";
 
 function Router() {
   return (
     <Switch>
+      {/* Admin login route */}
+      <Route path="/admin/login" component={AdminLogin} />
+      
       {/* Admin routes - without Layout */}
       <Route path="/admin" component={Admin} />
       <Route path="/admin/:rest*" component={Admin} />
