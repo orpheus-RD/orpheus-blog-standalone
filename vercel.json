@@ -8,6 +8,10 @@
     {
       "source": "/api/:path*",
       "destination": "${VITE_API_BASE_URL}/api/:path*"
+    },
+    {
+      "source": "/((?!assets/).*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
